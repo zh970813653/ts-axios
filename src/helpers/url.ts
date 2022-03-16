@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 function encode(val: string): string {
   return encodeURIComponent(val)
@@ -16,14 +16,11 @@ export function buildURL(url: string, params?: any): string {
   const parts: string[] = []
 
   Object.keys(params).forEach(key => {
-    debugger
     const value = params[key]
     // 如果value是数组类型，那么需要一个数组去表示
     let values = []
     const parts: string[] = []
-
     if (value === null || typeof value === undefined) return
-
     if (Array.isArray(value)) {
       values = value
       key += '[]'
@@ -35,7 +32,7 @@ export function buildURL(url: string, params?: any): string {
       if (isDate(val)) {
         // toISOString: 将日期转换时分秒
         val = val.toISOString()
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         val = JSON.stringify(val)
       }
       parts.push(`${encode(key)}=${encode(val)}`)
